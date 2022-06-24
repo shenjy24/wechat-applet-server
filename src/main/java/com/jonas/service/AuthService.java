@@ -30,7 +30,7 @@ public class AuthService {
     public Code2SessionResponse code2session(String code) {
         Map<String, Object> args = new HashMap<String, Object>() {{
            put("appid", "wx9692a6329bcdb403");
-           put("secret", "f4a63407b101e6f51e4d70e58476387c");
+           put("secret", "");
            put("js_code", code);
            put("grant_type", "authorization_code");
         }};
