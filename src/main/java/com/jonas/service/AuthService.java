@@ -35,6 +35,7 @@ public class AuthService {
 
     /**
      * 微信小程序登录
+     * 接口文档：https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
      *
      * @param code 微信小程序临时登录凭证
      * @return session信息
