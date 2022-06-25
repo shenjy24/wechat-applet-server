@@ -17,7 +17,7 @@ public class CodeGenerator {
     private static final String pass = "123456";
     private static final String author = "shenjy";
     private static final String outDir = System.getProperty("user.dir") + "/src/main/java";
-    private static final List<String> tables = Arrays.asList("wechat_session");
+    private static final List<String> tables = Arrays.asList("wechat_secret");
 
     public static void main(String[] args) {
         FastAutoGenerator.create(url, user, pass)

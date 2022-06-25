@@ -8,3 +8,7 @@ spring:
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
 
+applet:
+  appid: wx9692a6329bcdb403
+  code2sessionUrl: https://api.weixin.qq.com/sns/jscode2session
+
