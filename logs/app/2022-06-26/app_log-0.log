@@ -1,0 +1,37 @@
+2022-06-26 10:20:34.165 [INFO ] com.jonas.Application - Starting Application on jonas-mac.local with PID 8519 (/Users/shenjiayun/Documents/workspace/java/wechat-applet-server/target/classes started by shenjiayun in /Users/shenjiayun/Documents/workspace/java/wechat-applet-server)
+2022-06-26 10:20:34.172 [DEBUG] com.jonas.Application - Running with Spring Boot v2.3.2.RELEASE, Spring v5.2.8.RELEASE
+2022-06-26 10:20:34.173 [INFO ] com.jonas.Application - No active profile set, falling back to default profiles: default
+2022-06-26 10:20:40.340 [INFO ] com.jonas.Application - Started Application in 8.037 seconds (JVM running for 9.118)
+2022-06-26 10:21:08.911 [DEBUG] com.jonas.data.mysql.mapper.WechatSecretMapper.selectById - ==>  Preparing: SELECT appid,secret,create_time,update_time FROM wechat_secret WHERE appid=?
+2022-06-26 10:21:08.957 [DEBUG] com.jonas.data.mysql.mapper.WechatSecretMapper.selectById - ==> Parameters: wx9692a6329bcdb403(String)
+2022-06-26 10:21:08.996 [DEBUG] com.jonas.data.mysql.mapper.WechatSecretMapper.selectById - <==      Total: 1
+2022-06-26 10:21:09.006 [INFO ] com.jonas.service.AuthService - 调用code2session开始，appid为wx9692a6329bcdb403, js_code为013WmQ0w3wvIJY2Bkh0w3EsnQ14WmQ09
+2022-06-26 10:21:09.693 [INFO ] com.jonas.service.AuthService - 调用code2session成功，返回值为Code2SessionResponse(openid=ocqK84mFVsIEWzAIe6OIjWmc396A, session_key=WpQhFqrWWz+WjPFR7q23dw==, unionid=null, errcode=0, errmsg=null)
+2022-06-26 10:21:09.745 [DEBUG] com.jonas.data.mysql.mapper.WechatUserMapper.insert - ==>  Preparing: INSERT INTO wechat_user ( openid, session_key ) VALUES ( ?, ? )
+2022-06-26 10:21:09.746 [DEBUG] com.jonas.data.mysql.mapper.WechatUserMapper.insert - ==> Parameters: ocqK84mFVsIEWzAIe6OIjWmc396A(String), WpQhFqrWWz+WjPFR7q23dw==(String)
+2022-06-26 10:21:09.751 [DEBUG] com.jonas.data.mysql.mapper.WechatUserMapper.insert - <==    Updates: 1
+2022-06-26 10:21:09.752 [INFO ] com.jonas.service.AuthService - 保存WechatUser成功，WechatUser(openid=ocqK84mFVsIEWzAIe6OIjWmc396A, unionid=null, sessionKey=WpQhFqrWWz+WjPFR7q23dw==, createTime=null, updateTime=null)
+2022-06-26 10:21:45.910 [DEBUG] com.jonas.data.mysql.mapper.WechatSecretMapper.selectById - ==>  Preparing: SELECT appid,secret,create_time,update_time FROM wechat_secret WHERE appid=?
+2022-06-26 10:21:45.911 [DEBUG] com.jonas.data.mysql.mapper.WechatSecretMapper.selectById - ==> Parameters: wx9692a6329bcdb403(String)
+2022-06-26 10:21:45.913 [DEBUG] com.jonas.data.mysql.mapper.WechatSecretMapper.selectById - <==      Total: 1
+2022-06-26 10:21:45.913 [INFO ] com.jonas.service.AuthService - 调用code2session开始，appid为wx9692a6329bcdb403, js_code为053hmz0w38SZJY2biW3w3dnBeJ2hmz02
+2022-06-26 10:21:46.257 [INFO ] com.jonas.service.AuthService - 调用code2session成功，返回值为Code2SessionResponse(openid=ocqK84mFVsIEWzAIe6OIjWmc396A, session_key=WpQhFqrWWz+WjPFR7q23dw==, unionid=null, errcode=0, errmsg=null)
+2022-06-26 10:21:46.259 [DEBUG] com.jonas.data.mysql.mapper.WechatUserMapper.insert - ==>  Preparing: INSERT INTO wechat_user ( openid, session_key ) VALUES ( ?, ? )
+2022-06-26 10:21:46.260 [DEBUG] com.jonas.data.mysql.mapper.WechatUserMapper.insert - ==> Parameters: ocqK84mFVsIEWzAIe6OIjWmc396A(String), WpQhFqrWWz+WjPFR7q23dw==(String)
+2022-06-26 10:34:05.985 [INFO ] com.jonas.Application - Starting Application on jonas-mac.local with PID 8616 (/Users/shenjiayun/Documents/workspace/java/wechat-applet-server/target/classes started by shenjiayun in /Users/shenjiayun/Documents/workspace/java/wechat-applet-server)
+2022-06-26 10:34:05.990 [DEBUG] com.jonas.Application - Running with Spring Boot v2.3.2.RELEASE, Spring v5.2.8.RELEASE
+2022-06-26 10:34:05.990 [INFO ] com.jonas.Application - No active profile set, falling back to default profiles: default
+2022-06-26 10:34:11.491 [INFO ] com.jonas.Application - Started Application in 7.292 seconds (JVM running for 8.565)
+2022-06-26 10:34:29.235 [DEBUG] com.jonas.data.mysql.mapper.WechatSecretMapper.selectById - ==>  Preparing: SELECT appid,secret,create_time,update_time FROM wechat_secret WHERE appid=?
+2022-06-26 10:34:29.276 [DEBUG] com.jonas.data.mysql.mapper.WechatSecretMapper.selectById - ==> Parameters: wx9692a6329bcdb403(String)
+2022-06-26 10:34:29.318 [DEBUG] com.jonas.data.mysql.mapper.WechatSecretMapper.selectById - <==      Total: 1
+2022-06-26 10:34:29.329 [INFO ] com.jonas.service.AuthService - 调用code2session开始，appid为wx9692a6329bcdb403, js_code为033MMZkl20IAp94iqnml2OUVWa4MMZk1
+2022-06-26 10:34:30.104 [INFO ] com.jonas.service.AuthService - 调用code2session成功，返回值为Code2SessionResponse(openid=ocqK84mFVsIEWzAIe6OIjWmc396A, session_key=5zkXUIF6ooxBPkfkJyLeaQ==, unionid=null, errcode=0, errmsg=null)
+2022-06-26 10:34:30.131 [DEBUG] com.jonas.data.mysql.mapper.WechatUserMapper.selectById - ==>  Preparing: SELECT openid,unionid,session_key,create_time,update_time FROM wechat_user WHERE openid=?
+2022-06-26 10:34:30.132 [DEBUG] com.jonas.data.mysql.mapper.WechatUserMapper.selectById - ==> Parameters: ocqK84mFVsIEWzAIe6OIjWmc396A(String)
+2022-06-26 10:34:30.134 [DEBUG] com.jonas.data.mysql.mapper.WechatUserMapper.selectById - <==      Total: 1
+2022-06-26 10:34:30.187 [INFO ] com.jonas.config.MyMetaObjectHandler - start update fill ....
+2022-06-26 10:34:30.200 [DEBUG] com.jonas.data.mysql.mapper.WechatUserMapper.updateById - ==>  Preparing: UPDATE wechat_user SET session_key=?, update_time=? WHERE openid=?
+2022-06-26 10:34:30.204 [DEBUG] com.jonas.data.mysql.mapper.WechatUserMapper.updateById - ==> Parameters: 5zkXUIF6ooxBPkfkJyLeaQ==(String), 2022-06-26T10:34:30.200(LocalDateTime), ocqK84mFVsIEWzAIe6OIjWmc396A(String)
+2022-06-26 10:34:30.212 [DEBUG] com.jonas.data.mysql.mapper.WechatUserMapper.updateById - <==    Updates: 1
+2022-06-26 10:34:30.213 [INFO ] com.jonas.data.mysql.dao.WechatUserDao - 更新WechatUser成功，旧sessionKey为WpQhFqrWWz+WjPFR7q23dw==，新sessionKey为5zkXUIF6ooxBPkfkJyLeaQ==

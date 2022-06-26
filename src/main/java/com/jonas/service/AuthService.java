@@ -1,7 +1,9 @@
 package com.jonas.service;
 
-import com.jonas.data.mysql.dao.IWechatSecretService;
+import com.jonas.data.mysql.dao.WechatSecretDao;
+import com.jonas.data.mysql.dao.WechatUserDao;
 import com.jonas.data.mysql.entity.WechatSecret;
+import com.jonas.data.mysql.entity.WechatUser;
 import com.jonas.service.dto.Code2SessionResponse;
 import com.jonas.util.OkHttpUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +33,9 @@ public class AuthService {
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
-    private IWechatSecretService wechatSecretService;
+    private WechatSecretDao wechatSecretDao;
+    @Autowired
+    private WechatUserDao wechatUserDao;
 
     /**
      * 微信小程序登录
@@ -41,7 +45,7 @@ public class AuthService {
      * @return session信息
      */
     public Code2SessionResponse code2session(String code) {
-        WechatSecret wechatSecret = wechatSecretService.getById(appid);
+        WechatSecret wechatSecret = wechatSecretDao.getById(appid);
         if (null == wechatSecret) {
             log.error("不存在的appid:{}", appid);
             return null;
@@ -57,9 +61,10 @@ public class AuthService {
         try {
             Code2SessionResponse response = OkHttpUtil.synGet(code2sessionUrl, args, Code2SessionResponse.class);
             log.info("调用code2session成功，返回值为{}", response);
+            wechatUserDao.saveOrUpdateWechatUser(response.getOpenid(), response.getUnionid(), response.getSession_key());
             return response;
         } catch (IOException e) {
-            log.error("调用code2session异常，返回值为{}", e);
+            log.error("调用code2session异常", e);
             return null;
         }
     }
