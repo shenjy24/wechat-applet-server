@@ -1,0 +1,1 @@
+2022-06-26 11:02:22.250 [INFO ] com.jonas.config.access.AccessInterceptor - AccessLog(beginTime=1656212540670, host=0:0:0:0:0:0:0:1, url=/auth/code2session, method=GET, params={code=["093bAzll2fK4p94OTHml29SiAD2bAzlz"]}, consumeTime=1580, body=Code2SessionResponse(openid=ocqK84mFVsIEWzAIe6OIjWmc396A, session_key=cxnHcokGcAbJvB6aEinNdQ==, unionid=null, errcode=0, errmsg=null))

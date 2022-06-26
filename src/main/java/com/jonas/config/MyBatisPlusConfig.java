@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @author shenjy 2018/08/06
  */
 @Configuration
-@MapperScan("com.jonas.data.mysql.mapper")
+@MapperScan("com.jonas.repository.mysql.mapper")
 public class MyBatisPlusConfig {
 
 }

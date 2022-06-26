@@ -1,9 +1,8 @@
 package com.jonas.service;
 
-import com.jonas.data.mysql.dao.WechatSecretDao;
-import com.jonas.data.mysql.dao.WechatUserDao;
-import com.jonas.data.mysql.entity.WechatSecret;
-import com.jonas.data.mysql.entity.WechatUser;
+import com.jonas.repository.mysql.dao.WechatSecretDao;
+import com.jonas.repository.mysql.dao.WechatUserDao;
+import com.jonas.repository.mysql.entity.WechatSecret;
 import com.jonas.service.dto.Code2SessionResponse;
 import com.jonas.util.OkHttpUtil;
 import lombok.extern.slf4j.Slf4j;

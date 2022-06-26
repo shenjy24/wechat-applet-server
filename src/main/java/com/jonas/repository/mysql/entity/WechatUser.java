@@ -1,4 +1,4 @@
-package com.jonas.data.mysql.entity;
+package com.jonas.repository.mysql.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

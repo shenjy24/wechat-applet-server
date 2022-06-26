@@ -1,7 +1,7 @@
-package com.jonas.data.mysql.mapper;
+package com.jonas.repository.mysql.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jonas.data.mysql.entity.WechatUser;
+import com.jonas.repository.mysql.entity.WechatUser;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

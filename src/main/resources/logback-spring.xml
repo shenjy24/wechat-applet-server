@@ -132,7 +132,7 @@
         <appender-ref ref="INFO" />
     </logger>
 
-    <logger name="com.jonas.component.AccessInterceptor" additivity="true" level="INFO">
+    <logger name="com.jonas.config.access.AccessInterceptor" additivity="true" level="INFO">
         <appender-ref ref="ACCESS"/>
     </logger>
 

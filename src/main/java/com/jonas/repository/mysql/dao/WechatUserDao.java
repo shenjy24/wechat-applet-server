@@ -1,9 +1,9 @@
-package com.jonas.data.mysql.dao;
+package com.jonas.repository.mysql.dao;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jonas.data.mysql.entity.WechatUser;
-import com.jonas.data.mysql.mapper.WechatUserMapper;
+import com.jonas.repository.mysql.entity.WechatUser;
+import com.jonas.repository.mysql.mapper.WechatUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
