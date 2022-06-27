@@ -1,6 +1,9 @@
 package com.jonas.controller;
 
 import com.jonas.config.request.Anonymous;
+import com.jonas.config.request.WebThreadLocal;
+import com.jonas.config.response.model.BizException;
+import com.jonas.config.response.model.SystemCode;
 import com.jonas.repository.mysql.entity.WechatUser;
 import com.jonas.service.AuthService;
 import com.jonas.service.dto.UserProfile;
@@ -36,7 +39,6 @@ public class AuthController {
     /**
      * 解码用户信息
      *
-     * @param openid        用户标识
      * @param rawData       不包括敏感信息的原始数据字符串，用于计算签名
      * @param signature     微信签名，用于校验用户信息
      * @param encryptedData 包括敏感数据在内的完整用户信息的加密数据

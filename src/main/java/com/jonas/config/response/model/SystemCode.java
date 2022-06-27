@@ -11,7 +11,7 @@ public enum  SystemCode implements CodeStatus {
     SUCCESS("2000", "success"),
     PARAM_ERROR("2001", "parameter error"),
     SERVER_ERROR("2002", "server error"),
-    BIZ_ERROR("2004", "business error"),
+    BIZ_ERROR("2003", "business error"),
     ;
 
     private String code;

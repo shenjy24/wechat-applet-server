@@ -4,6 +4,7 @@ import com.jonas.config.access.AccessLog;
 import com.jonas.config.access.CurrentLog;
 import com.jonas.config.response.model.JsonResult;
 import com.jonas.config.response.model.SystemCode;
+import com.jonas.util.GsonUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -23,7 +24,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
-    public boolean supports(MethodParameter returenType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         return true;
     }
 
@@ -33,7 +34,11 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
         accessLog.setBody(body);
 
         if (!(body instanceof JsonResult)) {
-            return new JsonResult(SystemCode.SUCCESS, body);
+            JsonResult jsonResult = new JsonResult(SystemCode.SUCCESS, body);
+            if (body instanceof String) {
+                return GsonUtil.toJson(jsonResult);
+            }
+            return jsonResult;
         }
         return body;
     }

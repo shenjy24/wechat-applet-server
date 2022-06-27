@@ -46,7 +46,7 @@ public class OkHttpUtil {
 
     public static <T> T synGet(String url, Map<String, Object> params, Class<T> clazz) throws IOException {
         Response response = synGet(url, params);
-        if (response == null || response.body() == null || StringUtils.isBlank(response.body().string())) {
+        if (response == null || response.body() == null) {
             return null;
         }
 

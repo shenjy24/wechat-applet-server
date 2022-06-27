@@ -86,10 +86,6 @@ public class AuthService {
     }
 
     public UserProfile decryptUserProfile(String rawData, String signature, String encryptedData, String iv) {
-        if (!this.checkSignature(rawData, signature)) {
-            log.error("[decryptUserProfile] 验签失败，rawData为{}，signature为{}", rawData, signature);
-            throw new BizException(SystemCode.BIZ_ERROR);
-        }
         WechatUser wechatUser = WebThreadLocal.currentUser.get();
         if (null == wechatUser) {
             log.error("[decryptUserProfile] wechatUser不存在");
@@ -101,15 +97,23 @@ public class AuthService {
             throw new BizException(SystemCode.BIZ_ERROR);
         }
 
-        String decryptedData = this.decryptWxData(encryptedData, wechatUser.getSessionKey(), iv);
-        if (StringUtils.isBlank(decryptedData)) {
-            log.error("[decryptUserProfile] 解码失败，encryptedData为{}，iv为{}", encryptedData, iv);
+        // 验证签名
+        if (!this.checkSignature(rawData, wechatUser.getSessionKey(), signature)) {
+            log.error("[decryptUserProfile] 验签失败，rawData为{}，sessionKey为{}，signature为{}",
+                    rawData, wechatUser.getSessionKey(), signature);
             throw new BizException(SystemCode.BIZ_ERROR);
         }
-        UserProfile userProfile = GsonUtil.toBean(decryptedData, UserProfile.class);
+
+        String decryptedData = this.decryptWxData(encryptedData, wechatUser.getSessionKey(), iv);
+        if (StringUtils.isBlank(decryptedData)) {
+            log.error("[decryptUserProfile] 解码失败，encryptedData为{}，sessionKey为{}，iv为{}",
+                    encryptedData, wechatUser.getSessionKey(), iv);
+            throw new BizException(SystemCode.BIZ_ERROR);
+        }
         // 校验水印
+        UserProfile userProfile = GsonUtil.toBean(decryptedData, UserProfile.class);
         if (null == userProfile || null == userProfile.getWatermark()
-                || appid.equals(userProfile.getWatermark().getAppid())) {
+                || !userProfile.getWatermark().getAppid().equals(appid)) {
             log.error("[decryptUserProfile] 水印异常");
             throw new BizException(SystemCode.BIZ_ERROR);
         }
@@ -119,12 +123,13 @@ public class AuthService {
     /**
      * 验签
      *
-     * @param rawData   明文
-     * @param signature 签名
+     * @param rawData    明文
+     * @param sessionKey 会话密钥
+     * @param signature  签名
      * @return 是否验签成功
      */
-    private boolean checkSignature(String rawData, String signature) {
-        String content = rawData + signature;
+    private boolean checkSignature(String rawData, String sessionKey, String signature) {
+        String content = rawData + sessionKey;
         String sign = DigestUtils.shaHex(content);
         return sign.equals(signature);
     }
