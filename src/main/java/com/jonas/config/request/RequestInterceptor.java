@@ -1,5 +1,6 @@
 package com.jonas.config.request;
 
+import com.jonas.common.Constant;
 import com.jonas.config.response.model.BizException;
 import com.jonas.config.response.model.SystemCode;
 import com.jonas.repository.mysql.dao.WechatUserDao;
@@ -44,7 +45,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader(Constant.AUTH_HEADER);
         if (StringUtils.isBlank(token)) {
             log.error("Authorization头部不存在");
             throw new BizException(SystemCode.SERVER_ERROR);

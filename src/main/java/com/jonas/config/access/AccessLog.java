@@ -16,6 +16,7 @@ public class AccessLog {
     private String url;
     private String method;
     private Map<String, Object> params;
+    private Map<String, Object> headers;
     private long consumeTime; //耗时，毫秒级
     private Object body;
 }

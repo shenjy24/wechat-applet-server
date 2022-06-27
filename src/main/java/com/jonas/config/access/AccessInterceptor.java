@@ -1,5 +1,6 @@
 package com.jonas.config.access;
 
+import com.jonas.common.Constant;
 import com.jonas.util.GsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,9 @@ public class AccessInterceptor implements HandlerInterceptor {
         Map<String, Object> params = new HashMap<>();
         request.getParameterMap().forEach((key, value) -> params.put(key, GsonUtil.toJson(value)));
         accessLog.setParams(params);
+        Map<String, Object> headers = new HashMap<>();
+        headers.put(Constant.AUTH_HEADER, request.getHeader(Constant.AUTH_HEADER));
+        accessLog.setHeaders(headers);
         return true;
     }
 
