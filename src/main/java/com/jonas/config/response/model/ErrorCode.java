@@ -6,11 +6,16 @@ package com.jonas.config.response.model;
  * @description 业务错误码
  */
 public enum ErrorCode implements CodeStatus {
-
+    SIGN_ERROR("signature error");
     ;
 
     private final String code;
     private final String message;
+
+    ErrorCode(String message) {
+        this.code = SystemCode.BIZ_ERROR.getCode();
+        this.message = message;
+    }
 
     ErrorCode(String code, String message) {
         this.code = code;

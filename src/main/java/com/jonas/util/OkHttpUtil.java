@@ -1,6 +1,7 @@
 package com.jonas.util;
 
 import okhttp3.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class OkHttpUtil {
 
     public static <T> T synGet(String url, Map<String, Object> params, Class<T> clazz) throws IOException {
         Response response = synGet(url, params);
-        if (response == null) {
+        if (response == null || response.body() == null || StringUtils.isBlank(response.body().string())) {
             return null;
         }
 

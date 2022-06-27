@@ -44,6 +44,11 @@ public class WechatUser implements Serializable {
     private String sessionKey;
 
     /**
+     * 服务端与小程序通信凭证
+     */
+    private String token;
+
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
@@ -55,9 +60,10 @@ public class WechatUser implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
-    public WechatUser(String openid, String unionid, String sessionKey) {
+    public WechatUser(String openid, String unionid, String sessionKey, String token) {
         this.openid = openid;
         this.unionid = unionid;
         this.sessionKey = sessionKey;
+        this.token = token;
     }
 }
