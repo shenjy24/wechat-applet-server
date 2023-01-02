@@ -49,4 +49,9 @@ public class AuthController {
     public UserProfile decryptUserProfile(String rawData, String signature, String encryptedData, String iv) {
         return authService.decryptUserProfile(rawData, signature, encryptedData, iv);
     }
+
+    @RequestMapping("/updateUserProfile")
+    public void updateUserProfile(String avatarUrl, String nickname) {
+        authService.updateUserProfile(avatarUrl, nickname);
+    }
 }

@@ -16,3 +16,13 @@ CREATE TABLE `wechat_secret` (
   PRIMARY KEY (`appid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='微信小程序应用信息表';
 
+CREATE TABLE `wechat_user_info` (
+  `openid` varchar(64) NOT NULL COMMENT '微信小程序用户标识',
+  `unionid` varchar(64) DEFAULT NULL COMMENT '微信开放平台帐号用户标识',
+  `avatar` text NOT NULL COMMENT '头像',
+  `nickname` varchar(32) NOT NULL COMMENT '昵称',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+PRIMARY KEY (`openid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='微信小程序用户信息表';
+

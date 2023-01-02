@@ -163,4 +163,8 @@ public class AuthService {
         }
         return "";
     }
+
+    public void updateUserProfile(String avatarUrl, String nickname) {
+        log.info("avatarUrl:{}, nickname:{}", avatarUrl, nickname);
+    }
 }

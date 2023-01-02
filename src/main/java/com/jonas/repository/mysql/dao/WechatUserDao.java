@@ -43,6 +43,6 @@ public class WechatUserDao extends ServiceImpl<WechatUserMapper, WechatUser> imp
                 return wechatUser;
             }
         }
-        return null;
+        return wechatUser;
     }
 }
