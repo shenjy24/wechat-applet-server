@@ -7,6 +7,8 @@ import com.jonas.config.response.model.JsonResult;
 import com.jonas.config.response.model.SystemCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,7 +40,13 @@ public class GlobalExceptionHandler {
             message = message.split(":")[1].trim();
             return new JsonResult(SystemCode.PARAM_ERROR.getCode(), message, null);
         }
-
+        if (ex instanceof MethodArgumentNotValidException e) {
+            BindingResult result = e.getBindingResult();
+            if (result.getFieldError() != null) {
+                String msg = result.getFieldError().getDefaultMessage();
+                return new JsonResult(SystemCode.PARAM_ERROR, msg);
+            }
+        }
         log.error("handle exception", ex);
         return new JsonResult(SystemCode.SERVER_ERROR);
     }

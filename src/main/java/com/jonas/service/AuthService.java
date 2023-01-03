@@ -1,6 +1,5 @@
 package com.jonas.service;
 
-import com.jonas.config.request.WebThreadLocal;
 import com.jonas.config.response.model.BizException;
 import com.jonas.config.response.model.SystemCode;
 import com.jonas.repository.mysql.dao.WechatSecretDao;
@@ -86,8 +85,8 @@ public class AuthService {
         }
     }
 
-    public UserProfile decryptUserProfile(String rawData, String signature, String encryptedData, String iv) {
-        WechatUser wechatUser = WebThreadLocal.currentUser.get();
+    public UserProfile decryptUserProfile(WechatUser wechatUser, String rawData, String signature,
+                                          String encryptedData, String iv) {
         if (null == wechatUser) {
             log.error("[decryptUserProfile] wechatUser不存在");
             throw new BizException(SystemCode.BIZ_ERROR);
@@ -165,7 +164,7 @@ public class AuthService {
         return "";
     }
 
-    public void updateUserProfile(String avatarUrl, String nickname) {
+    public void updateUserProfile(WechatUser user, String avatarUrl, String nickname) {
         log.info("avatarUrl:{}, nickname:{}", avatarUrl, nickname);
     }
 }

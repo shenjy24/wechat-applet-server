@@ -12,11 +12,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
+import java.lang.annotation.Annotation;
 import java.util.Map;
 
 /**
@@ -33,14 +32,11 @@ public class RequestInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 如果不是映射到方法直接通过
-        if (!(handler instanceof HandlerMethod)) {
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Method method = handlerMethod.getMethod();
         // 匿名访问直接返回
-        Anonymous anonymous = method.getAnnotation(Anonymous.class);
-        if (anonymous != null) {
+        if (hasAnnotation(handlerMethod, Anonymous.class)) {
             return true;
         }
 
@@ -61,13 +57,13 @@ public class RequestInterceptor implements HandlerInterceptor {
             log.error("微信用户不存在，openid为{}", openid);
             throw new BizException(SystemCode.SERVER_ERROR);
         }
-        WebThreadLocal.currentUser.set(wechatUser);
 
-        return true;
+        request.setAttribute(Constant.REQ_ATT_USER, wechatUser);
+        return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        WebThreadLocal.currentUser.remove();
+    private boolean hasAnnotation(HandlerMethod method, Class<? extends Annotation> annotationClass) {
+        return method.hasMethodAnnotation(annotationClass) ||
+                method.getBeanType().isAnnotationPresent(annotationClass);
     }
 }

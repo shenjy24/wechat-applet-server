@@ -1,6 +1,7 @@
 package com.jonas.controller;
 
 import com.jonas.config.request.Anonymous;
+import com.jonas.config.request.User;
 import com.jonas.repository.mysql.entity.WechatUser;
 import com.jonas.service.AuthService;
 import com.jonas.service.dto.UserProfile;
@@ -43,12 +44,12 @@ public class AuthController {
      * @return 用户详细信息
      */
     @RequestMapping("/decryptUserProfile")
-    public UserProfile decryptUserProfile(String rawData, String signature, String encryptedData, String iv) {
-        return authService.decryptUserProfile(rawData, signature, encryptedData, iv);
+    public UserProfile decryptUserProfile(@User WechatUser user, String rawData, String signature, String encryptedData, String iv) {
+        return authService.decryptUserProfile(user, rawData, signature, encryptedData, iv);
     }
 
     @RequestMapping("/updateUserProfile")
-    public void updateUserProfile(String avatarUrl, String nickname) {
-        authService.updateUserProfile(avatarUrl, nickname);
+    public void updateUserProfile(@User WechatUser user, String avatarUrl, String nickname) {
+        authService.updateUserProfile(user, avatarUrl, nickname);
     }
 }
