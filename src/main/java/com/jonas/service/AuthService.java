@@ -4,10 +4,13 @@ import com.jonas.config.response.model.BizException;
 import com.jonas.config.response.model.SystemCode;
 import com.jonas.repository.mysql.dao.WechatSecretDao;
 import com.jonas.repository.mysql.dao.WechatUserDao;
+import com.jonas.repository.mysql.dao.WechatUserInfoDao;
 import com.jonas.repository.mysql.entity.WechatSecret;
 import com.jonas.repository.mysql.entity.WechatUser;
+import com.jonas.repository.mysql.entity.WechatUserInfo;
 import com.jonas.service.dto.Code2SessionResponse;
 import com.jonas.service.dto.UserProfile;
+import com.jonas.service.dto.UserView;
 import com.jonas.util.GsonUtil;
 import com.jonas.util.OkHttpUtil;
 import com.nimbusds.jose.JOSEException;
@@ -27,6 +30,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.AlgorithmParameters;
 import java.security.Security;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +51,7 @@ public class AuthService {
 
     private final WechatSecretDao wechatSecretDao;
     private final WechatUserDao wechatUserDao;
+    private final WechatUserInfoDao wechatUserInfoDao;
 
     private final UserService userService;
 
@@ -164,7 +169,24 @@ public class AuthService {
         return "";
     }
 
-    public void updateUserProfile(WechatUser user, String avatarUrl, String nickname) {
-        log.info("avatarUrl:{}, nickname:{}", avatarUrl, nickname);
+    public WechatUserInfo updateUserProfile(WechatUser wechatUser, String avatar, String nickname) {
+        if (null == wechatUser) {
+            log.error("[updateUserProfile] wechatUser不存在");
+            throw new BizException(SystemCode.BIZ_ERROR);
+        }
+        WechatUserInfo userInfo = wechatUserInfoDao.findById(wechatUser.getOpenid()).orElse(null);
+        if (null == userInfo) {
+            log.error("[updateUserProfile] userInfo不存在");
+            throw new BizException(SystemCode.BIZ_ERROR);
+        }
+        userInfo.setAvatar(avatar);
+        userInfo.setNickname(nickname);
+        userInfo.setUpdateTime(LocalDateTime.now());
+        log.info("更新用户信息成功，avatarUrl:{}, nickname:{}", avatar, nickname);
+        return wechatUserInfoDao.save(userInfo);
+    }
+
+    public UserView buildUserView(WechatUserInfo userInfo) {
+        return new UserView(userInfo.getAvatar(), userInfo.getNickname());
     }
 }

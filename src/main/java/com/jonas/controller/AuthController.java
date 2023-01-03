@@ -3,8 +3,10 @@ package com.jonas.controller;
 import com.jonas.config.request.Anonymous;
 import com.jonas.config.request.User;
 import com.jonas.repository.mysql.entity.WechatUser;
+import com.jonas.repository.mysql.entity.WechatUserInfo;
 import com.jonas.service.AuthService;
 import com.jonas.service.dto.UserProfile;
+import com.jonas.service.dto.UserView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,7 +51,8 @@ public class AuthController {
     }
 
     @RequestMapping("/updateUserProfile")
-    public void updateUserProfile(@User WechatUser user, String avatarUrl, String nickname) {
-        authService.updateUserProfile(user, avatarUrl, nickname);
+    public UserView updateUserProfile(@User WechatUser user, String avatar, String nickname) {
+        WechatUserInfo userInfo = authService.updateUserProfile(user, avatar, nickname);
+        return authService.buildUserView(userInfo);
     }
 }
