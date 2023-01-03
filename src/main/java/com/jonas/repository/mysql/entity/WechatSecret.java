@@ -1,11 +1,11 @@
 package com.jonas.repository.mysql.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,9 +18,9 @@ import java.time.LocalDateTime;
  * @since 2022-06-25
  */
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("wechat_secret")
 public class WechatSecret implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class WechatSecret implements Serializable {
     /**
      * 微信小程序应用标识
      */
-    @TableId
+    @Id
     private String appid;
 
     /**

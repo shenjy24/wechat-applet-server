@@ -12,12 +12,12 @@ import com.jonas.service.dto.UserProfile;
 import com.jonas.util.GsonUtil;
 import com.jonas.util.OkHttpUtil;
 import com.nimbusds.jose.JOSEException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +38,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     @Value("${applet.appid}")
@@ -45,20 +46,20 @@ public class AuthService {
     @Value("${applet.code2sessionUrl}")
     private String code2sessionUrl;
 
-    @Autowired
-    private WechatSecretDao wechatSecretDao;
-    @Autowired
-    private WechatUserDao wechatUserDao;
+    private final WechatSecretDao wechatSecretDao;
+    private final WechatUserDao wechatUserDao;
+
+    private final UserService userService;
 
     /**
      * 微信小程序登录
-     * 接口文档：https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
+     * 接口文档：<a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html">...</a>
      *
      * @param code 微信小程序临时登录凭证
      * @return session信息
      */
     public WechatUser code2session(String code) {
-        WechatSecret wechatSecret = wechatSecretDao.getById(appid);
+        WechatSecret wechatSecret = wechatSecretDao.findById(appid).orElse(null);
         if (null == wechatSecret) {
             log.error("WechatSecret不存在，appid为{}", appid);
             throw new BizException(SystemCode.BIZ_ERROR);
@@ -78,7 +79,7 @@ public class AuthService {
                 throw new BizException(SystemCode.BIZ_ERROR);
             }
             log.info("调用code2session成功，返回值为{}", response);
-            return wechatUserDao.saveOrUpdateWechatUser(response.getOpenid(), response.getUnionid(), response.getSession_key());
+            return userService.saveOrUpdateWechatUser(response.getOpenid(), response.getUnionid(), response.getSession_key());
         } catch (IOException | JOSEException e) {
             log.error("调用code2session异常", e);
             throw new BizException(SystemCode.BIZ_ERROR);
@@ -136,7 +137,7 @@ public class AuthService {
 
     /**
      * 解密微信加密数据，对称解密使用的算法为 AES-128-CBC，数据采用PKCS#7填充。
-     * https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/signature.html
+     * <a href="https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/signature.html">...</a>
      *
      * @param encryptedData 加密串
      * @param sessionKey    会话密钥

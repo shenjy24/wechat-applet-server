@@ -1,13 +1,10 @@
 package com.jonas.controller;
 
 import com.jonas.config.request.Anonymous;
-import com.jonas.config.request.WebThreadLocal;
-import com.jonas.config.response.model.BizException;
-import com.jonas.config.response.model.SystemCode;
 import com.jonas.repository.mysql.entity.WechatUser;
 import com.jonas.service.AuthService;
 import com.jonas.service.dto.UserProfile;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,17 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
  * @description LoginController
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     /**
      * 通过code获得token
      *
      * @param code 微信临时凭证
-     * @return token,服务端与微信小程序的凭证
+     * @return token, 服务端与微信小程序的凭证
      */
     @Anonymous
     @RequestMapping("/code2session")
