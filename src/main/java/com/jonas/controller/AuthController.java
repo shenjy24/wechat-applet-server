@@ -5,6 +5,7 @@ import com.jonas.config.request.User;
 import com.jonas.repository.mysql.entity.WechatUser;
 import com.jonas.repository.mysql.entity.WechatUserInfo;
 import com.jonas.service.AuthService;
+import com.jonas.service.UserService;
 import com.jonas.service.dto.UserProfile;
 import com.jonas.service.dto.UserView;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
     /**
      * 通过code获得token
@@ -52,7 +54,13 @@ public class AuthController {
 
     @RequestMapping("/updateUserProfile")
     public UserView updateUserProfile(@User WechatUser user, String avatar, String nickname) {
-        WechatUserInfo userInfo = authService.updateUserProfile(user, avatar, nickname);
-        return authService.buildUserView(userInfo);
+        WechatUserInfo userInfo = userService.updateUserProfile(user, avatar, nickname);
+        return userService.buildUserView(userInfo);
+    }
+
+    @RequestMapping("/getUserProfile")
+    public UserView getUserProfile(@User WechatUser user) {
+        WechatUserInfo userInfo = userService.getWechatUserInfo(user.getOpenid());
+        return userService.buildUserView(userInfo);
     }
 }
