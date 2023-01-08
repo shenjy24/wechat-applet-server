@@ -112,6 +112,12 @@
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>9.23</version>
         </dependency>
+        <!--快递100服务接口-->
+        <dependency>
+            <groupId>com.github.kuaidi100-api</groupId>
+            <artifactId>sdk</artifactId>
+            <version>1.0.11</version>
+        </dependency>
     </dependencies>
 
     <build>

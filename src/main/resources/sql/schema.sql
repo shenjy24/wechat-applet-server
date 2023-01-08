@@ -26,3 +26,13 @@ CREATE TABLE `wechat_user_info` (
 PRIMARY KEY (`openid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='微信小程序用户信息表';
 
+CREATE TABLE `wechat_express` (
+  `id` int NOT NULL COMMENt '逻辑id',
+  `userid` varchar(128) NOT NULL COMMENt '快递100用户id',
+  `customer` char(32) NOT NULL COMMENT '快递100授权码',
+  `key` char(12) DEFAULT NULL COMMENT '快递100授权key',
+  `secret` varchar(32) NOT NULL COMMENT '快递100密码',
+  `create_time` datetime DEFAULT now() COMMENT '创建时间',
+  `update_time` datetime DEFAULT now() COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='快递100信息表';
