@@ -20,4 +20,8 @@ applet:
 
 express:
   id: 1
+baidu:
+  api:
+    appid: 15588991
+    weather: https://api.map.baidu.com/weather/v1/
 

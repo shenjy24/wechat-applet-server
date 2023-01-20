@@ -7,7 +7,9 @@ package com.jonas.config.response.model;
  */
 public enum ErrorCode implements CodeStatus {
     SIGN_ERROR("signature error"),
-    EXPRESS_ERROR("express error")
+    EXPRESS_ERROR("express error"),
+
+    BAIDU_ERROR("baidu error"),
     ;
 
     private final String code;

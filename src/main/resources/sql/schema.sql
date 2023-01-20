@@ -36,3 +36,13 @@ CREATE TABLE `wechat_express` (
   `update_time` datetime DEFAULT now() COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='快递100信息表';
+
+CREATE TABLE `baidu_api` (
+  `appid` int NOT NULL COMMENt '百度开放平台应用编号',
+  `app_name` varchar(128) NOT NULL COMMENt '应用名称',
+  `ak` varchar(32) NOT NULL COMMENT '应用授权码',
+  `type` varchar(32) COMMENT '应用类型',
+  `create_time` datetime DEFAULT now() COMMENT '创建时间',
+  `update_time` datetime DEFAULT now() COMMENT '更新时间',
+  PRIMARY KEY (`appid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='百度开放平台信息表';
