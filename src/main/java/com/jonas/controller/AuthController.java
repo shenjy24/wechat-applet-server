@@ -6,6 +6,7 @@ import com.jonas.repository.mysql.entity.WechatUser;
 import com.jonas.repository.mysql.entity.WechatUserInfo;
 import com.jonas.service.AuthService;
 import com.jonas.service.UserService;
+import com.jonas.service.dto.Code2SessionResponse;
 import com.jonas.service.dto.UserProfile;
 import com.jonas.service.dto.UserView;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,8 @@ public class AuthController {
     @Anonymous
     @RequestMapping("/code2session")
     public String code2session(String code) {
-        WechatUser wechatUser = authService.code2session(code);
+        Code2SessionResponse response = authService.code2session(code);
+        WechatUser wechatUser = userService.saveOrUpdateWechatUser(response.getOpenid(), response.getUnionid(), response.getSession_key());
         return wechatUser.getToken();
     }
 

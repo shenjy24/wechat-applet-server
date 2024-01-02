@@ -3,14 +3,12 @@ package com.jonas.service;
 import com.jonas.config.response.model.BizException;
 import com.jonas.config.response.model.SystemCode;
 import com.jonas.repository.mysql.dao.WechatSecretDao;
-import com.jonas.repository.mysql.dao.WechatUserInfoDao;
 import com.jonas.repository.mysql.entity.WechatSecret;
 import com.jonas.repository.mysql.entity.WechatUser;
 import com.jonas.service.dto.Code2SessionResponse;
 import com.jonas.service.dto.UserProfile;
 import com.jonas.util.GsonUtil;
 import com.jonas.util.OkHttpUtil;
-import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.AlgorithmParameters;
 import java.security.Security;
@@ -46,8 +43,6 @@ public class AuthService {
     private String code2sessionUrl;
 
     private final WechatSecretDao wechatSecretDao;
-    private final WechatUserInfoDao wechatUserInfoDao;
-
     private final UserService userService;
 
     /**
@@ -57,14 +52,14 @@ public class AuthService {
      * @param code 微信小程序临时登录凭证
      * @return session信息
      */
-    public WechatUser code2session(String code) {
+    public Code2SessionResponse code2session(String code) {
         WechatSecret wechatSecret = wechatSecretDao.findById(appid).orElse(null);
         if (null == wechatSecret) {
             log.error("WechatSecret不存在，appid为{}", appid);
             throw new BizException(SystemCode.BIZ_ERROR);
         }
 
-        Map<String, Object> args = new HashMap<String, Object>() {{
+        Map<String, Object> args = new HashMap<>() {{
             put("appid", appid);
             put("secret", wechatSecret.getSecret());
             put("js_code", code);
@@ -78,8 +73,8 @@ public class AuthService {
                 throw new BizException(SystemCode.BIZ_ERROR);
             }
             log.info("调用code2session成功，返回值为{}", response);
-            return userService.saveOrUpdateWechatUser(response.getOpenid(), response.getUnionid(), response.getSession_key());
-        } catch (IOException | JOSEException e) {
+            return response;
+        } catch (Exception e) {
             log.error("调用code2session异常", e);
             throw new BizException(SystemCode.BIZ_ERROR);
         }

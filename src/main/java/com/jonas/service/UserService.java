@@ -27,10 +27,10 @@ public class UserService {
     private final WechatUserDao wechatUserDao;
     private final WechatUserInfoDao wechatUserInfoDao;
 
-    public WechatUser saveOrUpdateWechatUser(String openid, String unionid, String sessionKey) throws JOSEException {
+    public WechatUser saveOrUpdateWechatUser(String openid, String unionid, String sessionKey) {
         WechatUser wechatUser = wechatUserDao.findById(openid).orElse(null);
         if (wechatUser == null) {
-            String token = JwtUtil.generateToken(openid);
+            String token = this.getToken(openid);
             wechatUser = new WechatUser(openid, unionid, sessionKey, token);
             wechatUserDao.save(wechatUser);
             log.info("保存WechatUser成功，{}", wechatUser);
@@ -43,7 +43,7 @@ public class UserService {
             String oldSessionKey = wechatUser.getSessionKey();
             String oldToken = wechatUser.getToken();
             if (!oldSessionKey.equals(sessionKey)) {
-                String token = JwtUtil.generateToken(openid);
+                String token = this.getToken(openid);
                 wechatUser.setToken(token);
                 wechatUser.setSessionKey(sessionKey);
                 log.info("更新WechatUser成功，旧sessionKey为{}，新sessionKey为{}, 旧token为{}，新token为{}",
@@ -52,6 +52,15 @@ public class UserService {
             }
         }
         return wechatUser;
+    }
+
+    private String getToken(String openid) {
+        try {
+            return JwtUtil.generateToken(openid);
+        } catch (JOSEException e) {
+            log.error("保存或创建微信用户异常", e);
+            throw new BizException(SystemCode.SERVER_ERROR);
+        }
     }
 
     public WechatUserInfo getWechatUserInfo(String openid) {

@@ -17,6 +17,7 @@ spring:
 applet:
   appid: wx9692a6329bcdb403
   code2sessionUrl: https://api.weixin.qq.com/sns/jscode2session
+  getAccessTokenUrl: https://api.weixin.qq.com/cgi-bin/token
 
 express:
   id: 1
