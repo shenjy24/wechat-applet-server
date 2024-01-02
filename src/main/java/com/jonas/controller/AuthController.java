@@ -2,10 +2,11 @@ package com.jonas.controller;
 
 import com.jonas.config.request.Anonymous;
 import com.jonas.config.request.User;
+import com.jonas.repository.mysql.entity.WechatAccessToken;
 import com.jonas.repository.mysql.entity.WechatUser;
 import com.jonas.repository.mysql.entity.WechatUserInfo;
-import com.jonas.service.AuthService;
 import com.jonas.service.UserService;
+import com.jonas.service.WechatService;
 import com.jonas.service.dto.Code2SessionResponse;
 import com.jonas.service.dto.UserProfile;
 import com.jonas.service.dto.UserView;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthService authService;
+    private final WechatService wechatService;
     private final UserService userService;
 
     /**
@@ -35,9 +36,20 @@ public class AuthController {
     @Anonymous
     @RequestMapping("/code2session")
     public String code2session(String code) {
-        Code2SessionResponse response = authService.code2session(code);
+        Code2SessionResponse response = wechatService.code2session(code);
         WechatUser wechatUser = userService.saveOrUpdateWechatUser(response.getOpenid(), response.getUnionid(), response.getSession_key());
         return wechatUser.getToken();
+    }
+
+    /**
+     * 获取access_token
+     *
+     * @return token, 微信服务端的凭证
+     */
+    @Anonymous
+    @RequestMapping("/getAccessToken")
+    public WechatAccessToken getAccessToken() {
+        return wechatService.getWechatAccessToken();
     }
 
     /**
@@ -51,7 +63,7 @@ public class AuthController {
      */
     @RequestMapping("/decryptUserProfile")
     public UserProfile decryptUserProfile(@User WechatUser user, String rawData, String signature, String encryptedData, String iv) {
-        return authService.decryptUserProfile(user, rawData, signature, encryptedData, iv);
+        return wechatService.decryptUserProfile(user, rawData, signature, encryptedData, iv);
     }
 
     @RequestMapping("/updateUserProfile")

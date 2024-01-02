@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.jonas.config.response.model.BizException;
 import com.jonas.config.response.model.JsonResult;
 import com.jonas.config.response.model.SystemCode;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.validation.BindingResult;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 /**

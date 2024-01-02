@@ -1,11 +1,15 @@
 package com.jonas.service;
 
+import com.jonas.common.Constant;
 import com.jonas.config.response.model.BizException;
 import com.jonas.config.response.model.SystemCode;
+import com.jonas.repository.mysql.dao.WechatAccessTokenDao;
 import com.jonas.repository.mysql.dao.WechatSecretDao;
+import com.jonas.repository.mysql.entity.WechatAccessToken;
 import com.jonas.repository.mysql.entity.WechatSecret;
 import com.jonas.repository.mysql.entity.WechatUser;
 import com.jonas.service.dto.Code2SessionResponse;
+import com.jonas.service.dto.GetAccessTokenResponse;
 import com.jonas.service.dto.UserProfile;
 import com.jonas.util.GsonUtil;
 import com.jonas.util.OkHttpUtil;
@@ -24,30 +28,90 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.AlgorithmParameters;
 import java.security.Security;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 微信服务，主要调用微信接口
+ *
  * @author shenjy
- * @createTime 2022/6/24 17:22
- * @description LoginService
+ * @time 2022/6/24 17:22
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class WechatService {
 
     @Value("${applet.appid}")
     private String appid;
     @Value("${applet.code2sessionUrl}")
     private String code2sessionUrl;
+    @Value("${applet.getAccessTokenUrl}")
+    private String getAccessTokenUrl;
 
     private final WechatSecretDao wechatSecretDao;
-    private final UserService userService;
+    private final WechatAccessTokenDao wechatAccessTokenDao;
+
+    public WechatAccessToken getWechatAccessToken() {
+        WechatAccessToken accessToken = wechatAccessTokenDao.findById(appid).orElse(null);
+        long nowTime = System.currentTimeMillis();
+        // access_token还未过期，则直接
+        if (null != accessToken && accessToken.getExpireTime().getTime() - nowTime > Constant.ACCESS_TOKEN_REFRESH_MS) {
+            return accessToken;
+        }
+        GetAccessTokenResponse response = this.callAccessToken();
+        Timestamp expireTime = new Timestamp(nowTime + response.getExpires_in() * 1000);
+        Timestamp nowTimestamp = new Timestamp(nowTime);
+        if (null == accessToken) {
+            accessToken = new WechatAccessToken(appid, response.getAccess_token(), expireTime, nowTimestamp, nowTimestamp);
+            wechatAccessTokenDao.save(accessToken);
+        } else {
+            accessToken.setAccessToken(response.getAccess_token());
+            accessToken.setExpireTime(expireTime);
+            accessToken.setUpdateTime(nowTimestamp);
+            wechatAccessTokenDao.save(accessToken);
+        }
+        return accessToken;
+    }
+
+    /**
+     * 获取微信 access_token
+     * 接口文档：<a href="https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-access-token/getAccessToken.html">getAccessToken</a>
+     */
+    public GetAccessTokenResponse callAccessToken() {
+        WechatSecret wechatSecret = wechatSecretDao.findById(appid).orElse(null);
+        if (null == wechatSecret) {
+            log.error("WechatSecret不存在，appid为{}", appid);
+            throw new BizException(SystemCode.BIZ_ERROR);
+        }
+        Map<String, Object> args = new HashMap<>() {{
+            put("appid", appid);
+            put("secret", wechatSecret.getSecret());
+            put("grant_type", "client_credential");
+        }};
+        log.info("调用getAccessToken开始，appid为{}", appid);
+        try {
+            GetAccessTokenResponse response = OkHttpUtil.synGet(getAccessTokenUrl, args, GetAccessTokenResponse.class);
+            if (null == response) {
+                log.error("调用getAccessToken失败，返回值为空");
+                throw new BizException(SystemCode.BIZ_ERROR);
+            }
+            if (StringUtils.isBlank(response.getAccess_token())) {
+                log.error("调用getAccessToken失败，返回值为{}", response);
+                throw new BizException(SystemCode.BIZ_ERROR);
+            }
+            log.info("调用getAccessToken成功，返回值为{}", response);
+            return response;
+        } catch (Exception e) {
+            log.error("调用getAccessToken异常", e);
+            throw new BizException(SystemCode.BIZ_ERROR);
+        }
+    }
 
     /**
      * 微信小程序登录
-     * 接口文档：<a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html">...</a>
+     * 接口文档：<a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html">code2session</a>
      *
      * @param code 微信小程序临时登录凭证
      * @return session信息
