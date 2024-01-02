@@ -15,6 +15,7 @@ import com.jonas.util.GsonUtil;
 import com.jonas.util.OkHttpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Response;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -49,9 +50,47 @@ public class WechatService {
     private String code2sessionUrl;
     @Value("${applet.getAccessTokenUrl}")
     private String getAccessTokenUrl;
+    @Value("${applet.sendMessageUrl}")
+    private String sendMessageUrl;
 
     private final WechatSecretDao wechatSecretDao;
     private final WechatAccessTokenDao wechatAccessTokenDao;
+
+    /**
+     * 消息推送
+     *
+     * @param openid     用户标识
+     * @param templateId 模板ID
+     * @param data       模板内容
+     */
+    public void sendMessage(String openid, String templateId, String data) {
+        WechatAccessToken accessToken = this.getWechatAccessToken();
+        Map<String, Map<String, String>> dataMap = new HashMap<>();
+        Map<String, String> item1Map = new HashMap<>();
+        item1Map.put("value", "您的餐已到达");
+        dataMap.put("thing1", item1Map);
+
+        Map<String, String> item2Map = new HashMap<>();
+        item2Map.put("value", "123456");
+        dataMap.put("character_string3", item2Map);
+
+        Map<String, Object> args = new HashMap<>();
+        args.put("template_id", templateId);
+        args.put("touser", openid);
+        args.put("data", dataMap);
+        log.info("调用sendMessage开始，参数为{}", GsonUtil.toJson(args));
+        try {
+            Response response = OkHttpUtil.syncJsonPost(sendMessageUrl + accessToken.getAccessToken(), GsonUtil.toJson(args));
+            if (null == response) {
+                log.error("调用sendMessage失败，openid为{}, templateId为{}, data为{}", openid, templateId, GsonUtil.toJson(dataMap));
+                throw new BizException(SystemCode.BIZ_ERROR);
+            }
+            log.info("调用getAccessToken结束，返回值为{}", response.body().string());
+        } catch (Exception e) {
+            log.error("调用getAccessToken异常", e);
+            throw new BizException(SystemCode.BIZ_ERROR);
+        }
+    }
 
     public WechatAccessToken getWechatAccessToken() {
         WechatAccessToken accessToken = wechatAccessTokenDao.findById(appid).orElse(null);
