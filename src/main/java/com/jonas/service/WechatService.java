@@ -63,31 +63,32 @@ public class WechatService {
      * @param templateId 模板ID
      * @param data       模板内容
      */
-    public void sendMessage(String openid, String templateId, String data) {
-        WechatAccessToken accessToken = this.getWechatAccessToken();
-        Map<String, Map<String, String>> dataMap = new HashMap<>();
-        Map<String, String> item1Map = new HashMap<>();
-        item1Map.put("value", "您的餐已到达");
-        dataMap.put("thing1", item1Map);
-
-        Map<String, String> item2Map = new HashMap<>();
-        item2Map.put("value", "123456");
-        dataMap.put("character_string3", item2Map);
+    public void sendMessage(String openid, String templateId, Map<String, Object> data) {
+        Map<String, Map<String, Object>> dataMap = new HashMap<>();
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            Map<String, Object> itemMap = new HashMap<>();
+            itemMap.put("value", entry.getValue());
+            dataMap.put(entry.getKey(), itemMap);
+        }
 
         Map<String, Object> args = new HashMap<>();
         args.put("template_id", templateId);
         args.put("touser", openid);
         args.put("data", dataMap);
-        log.info("调用sendMessage开始，参数为{}", GsonUtil.toJson(args));
+
+        String params = GsonUtil.toJson(args);
+        log.info("调用sendMessage开始，参数为{}", params);
         try {
-            Response response = OkHttpUtil.syncJsonPost(sendMessageUrl + accessToken.getAccessToken(), GsonUtil.toJson(args));
+            WechatAccessToken accessToken = this.getWechatAccessToken();
+            // 需要JSON格式
+            Response response = OkHttpUtil.syncJsonPost(sendMessageUrl + accessToken.getAccessToken(), params);
             if (null == response) {
-                log.error("调用sendMessage失败，openid为{}, templateId为{}, data为{}", openid, templateId, GsonUtil.toJson(dataMap));
+                log.error("调用sendMessage失败，参数为{}", params);
                 throw new BizException(SystemCode.BIZ_ERROR);
             }
-            log.info("调用getAccessToken结束，返回值为{}", response.body().string());
+            log.info("调用sendMessage结束，返回值为{}", response.body().string());
         } catch (Exception e) {
-            log.error("调用getAccessToken异常", e);
+            log.error("调用sendMessage异常", e);
             throw new BizException(SystemCode.BIZ_ERROR);
         }
     }
