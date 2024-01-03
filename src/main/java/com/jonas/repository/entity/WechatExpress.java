@@ -1,4 +1,4 @@
-package com.jonas.repository.mysql.entity;
+package com.jonas.repository.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 微信小程序应用信息表
+ * 快递100信息表
  * </p>
  *
  * @author shenjy
@@ -21,18 +21,33 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class WechatSecret implements Serializable {
+public class WechatExpress implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 微信小程序应用标识
+     * 本系统的快递100逻辑ID
      */
     @Id
-    private String appid;
+    private Integer id;
 
     /**
-     * 微信小程序应用密钥
+     * 快递100用户ID
+     */
+    private String userid;
+
+    /**
+     * 快递100授权码
+     */
+    private String customer;
+
+    /**
+     * 快递100授权key
+     */
+    private String key;
+
+    /**
+     * 快递100密码
      */
     private String secret;
 

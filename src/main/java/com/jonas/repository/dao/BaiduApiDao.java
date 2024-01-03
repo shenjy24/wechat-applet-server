@@ -1,7 +1,6 @@
-package com.jonas.repository.mysql.dao;
+package com.jonas.repository.dao;
 
-import com.jonas.repository.mysql.entity.BaiduApi;
-import com.jonas.repository.mysql.entity.WechatUserInfo;
+import com.jonas.repository.entity.BaiduApi;
 import org.springframework.data.repository.CrudRepository;
 
 /**

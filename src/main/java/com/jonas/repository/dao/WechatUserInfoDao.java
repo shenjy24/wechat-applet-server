@@ -1,6 +1,6 @@
-package com.jonas.repository.mysql.dao;
+package com.jonas.repository.dao;
 
-import com.jonas.repository.mysql.entity.WechatUserInfo;
+import com.jonas.repository.entity.WechatUserInfo;
 import org.springframework.data.repository.CrudRepository;
 
 /**

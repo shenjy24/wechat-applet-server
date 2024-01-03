@@ -1,4 +1,4 @@
-package com.jonas.repository.mysql.entity;
+package com.jonas.repository.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

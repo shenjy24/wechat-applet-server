@@ -1,7 +1,7 @@
 package com.jonas.config.request;
 
 import com.jonas.common.Constant;
-import com.jonas.repository.mysql.entity.WechatUser;
+import com.jonas.repository.entity.WechatUser;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

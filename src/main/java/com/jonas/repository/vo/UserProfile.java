@@ -1,4 +1,4 @@
-package com.jonas.service.dto;
+package com.jonas.repository.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
