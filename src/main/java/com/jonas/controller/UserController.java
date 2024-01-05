@@ -2,9 +2,8 @@ package com.jonas.controller;
 
 import com.jonas.config.request.User;
 import com.jonas.controller.qo.SendMessageQo;
-import com.jonas.repository.mysql.entity.WechatUser;
+import com.jonas.repository.entity.WechatUser;
 import com.jonas.service.WechatService;
-import com.jonas.util.GsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;

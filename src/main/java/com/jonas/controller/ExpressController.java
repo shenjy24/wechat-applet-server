@@ -1,7 +1,6 @@
 package com.jonas.controller;
 
 import com.jonas.config.request.Anonymous;
-import com.jonas.repository.mysql.entity.WechatUser;
 import com.jonas.service.ExpressService;
 import com.kuaidi100.sdk.request.QueryTrackParam;
 import com.kuaidi100.sdk.response.QueryTrackResp;
