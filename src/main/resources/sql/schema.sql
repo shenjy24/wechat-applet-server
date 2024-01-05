@@ -65,3 +65,15 @@ CREATE TABLE `baidu_api`
     PRIMARY KEY (`appid`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='百度开放平台信息表';
+
+CREATE TABLE `wechat_message_template`
+(
+    `id`          bigint      NOT NULL COMMENT '主键ID',
+    `template_id` varchar(64) NOT NULL COMMENT '模板ID',
+    `param_key`   varchar(64) NOT NULL COMMENT '参数键',
+    `order_num`   int NOT NULL COMMENT '昵称',
+    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`openid`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='微信小程序用户信息表';
